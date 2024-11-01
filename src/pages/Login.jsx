@@ -7,7 +7,7 @@ import axios from 'axios';
 import { api } from '../context/useAuth';
 
 export const Login = () => {
-  const [userName, setUserName] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
@@ -17,7 +17,7 @@ export const Login = () => {
     e.preventDefault();
 
     const data = {
-      userName, password
+      email, password
     }
 
     axios.post(`${api}/account/login`, data, {
@@ -26,14 +26,17 @@ export const Login = () => {
       }
     })
     .then(response => {
-      console.log('Response:', response.data);
-      navigate('/registration')
+      localStorage.setItem('userId', response.data.userId);
+      localStorage.setItem('token', response.data.token);
+      localStorage.setItem('email', response.data.email);
+      localStorage.setItem('userName', response.data.userName);
+      navigate('/home');
     })
     .catch(error => {
       console.error('Error:', error.response.data);
       
       if(error.response.data){
-        setError(error.reponse.data);
+        setError(error.response.data);
       }else{
         setError('An error occured. Please try again.')
       }
@@ -58,7 +61,7 @@ export const Login = () => {
         <h4 className="text-[15px]">Please Enter your Account details</h4>
         <span className="flex flex-col w-3/5">
           <p className="text-[13px]">Email</p>
-          <input type="text" className="px-2 rounded w-full h-[2.5rem] outline-0 text-gray-500 text-[14px] font-semibold" value={userName} onChange={e => setUserName(e.target.value)} />
+          <input type="text" className="px-2 rounded w-full h-[2.5rem] outline-0 text-gray-500 text-[14px] font-semibold" value={email} onChange={e => setEmail(e.target.value)} />
         </span>
 
         <span className="flex flex-col w-3/5">
@@ -68,7 +71,11 @@ export const Login = () => {
         <p className="text-[13px] mt-1 text-white ">Forgot Password</p>
           </Link>
         </span>
-
+        {error && (
+          <div className="text-red-500 mt-2">
+            {typeof error === 'string' ? error : JSON.stringify(error.response, null, 2)}
+          </div>
+        )}
         <button className="btn btn-warning w-3/5 h-[2.5rem] mb-6 text-white text-[17px] font-bold">Login</button>
         </form>
         <div className="flex flex-row justify-content-center w-3/5 my-[2rem] text-[4rem] ">
@@ -79,7 +86,7 @@ export const Login = () => {
         <div className="text-[15px]">
           <span className="flex text-white">Don't have an account? <Link to='/registration'><p className="text-reset pl-2">Register here</p></Link></span>
         </div>
-          
+        
       </div>
     </div>
   )

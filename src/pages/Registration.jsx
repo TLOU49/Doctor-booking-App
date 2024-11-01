@@ -167,6 +167,11 @@ export const Registration = () => {
         <button className="btn col-10 btn-warning text-white font-bold" >Register</button>
         </span>
         </form>
+        {error && (
+          <div className="text-red-500 mt-2">
+            {typeof error === 'string' ? error : JSON.stringify(error.response, null, 2)}
+          </div>
+        )}
     </div>
 </div>
   )

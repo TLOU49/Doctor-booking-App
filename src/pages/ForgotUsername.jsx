@@ -51,6 +51,11 @@ export const ForgotUsername = () => {
         <p className="mt-4">Cancel</p>
         </Link>
     </div>
+    {error && (
+          <div className="text-red-500 mt-2">
+            {typeof error === 'string' ? error : JSON.stringify(error.response, null, 2)}
+          </div>
+        )}
     </div>
   )
 }

@@ -25,7 +25,11 @@ export const ForgotPassword = () => {
      </Link>
 
      <p className="">If you continue to have difficulties to login please contact our support team on DMabuela@singular.co.za</p>
-     
+     {error && (
+          <div className="text-red-500 mt-2">
+            {typeof error === 'string' ? error : JSON.stringify(error.response, null, 2)}
+          </div>
+        )}
     </div>
   )
 }
